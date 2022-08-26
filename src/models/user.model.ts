@@ -53,6 +53,16 @@ const userSchema = new Schema<UserType>({
             }
         }
     },
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+}
+)
+
+userSchema.virtual('tasks', {
+    ref: 'Task',
+    localField: '_id',
+    foreignField: 'ownerId',
 })
 
 userSchema.pre('save', async function (next) {

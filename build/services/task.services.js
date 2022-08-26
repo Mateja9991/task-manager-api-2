@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTask = exports.updateTask = exports.getTask = exports.getAllTasks = exports.addTask = void 0;
+exports.deleteTask = exports.updateTask = exports.getTask = exports.getAllTasks = exports.getMyTasks = exports.addTask = void 0;
 const models_1 = require("../models");
 const mongoose_1 = __importDefault(require("mongoose"));
 function addTask(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { query, body } = req;
-            const newTask = new models_1.Task(Object.assign({}, body));
+            const newTask = new models_1.Task(Object.assign(Object.assign({}, body), { ownerId: req.user._id }));
             yield newTask.save();
             res.send(newTask);
         }
@@ -44,6 +44,24 @@ function getAllTasks(req, res, next) {
     });
 }
 exports.getAllTasks = getAllTasks;
+function getMyTasks(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { query, body, user } = req;
+            // const tasks = wait Task.find({ ...query, ownerId: req.user._id })
+            console.log('test', user.toObject());
+            const test = yield req.user.populate(['tasks']);
+            // await req.user.populate('tasks').execPopulate()
+            res.send(test);
+            // res.send(tasks)
+        }
+        catch (err) {
+            console.log(err);
+            res.status(400).send(err);
+        }
+    });
+}
+exports.getMyTasks = getMyTasks;
 function getTask(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

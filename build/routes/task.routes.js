@@ -7,6 +7,7 @@ const middleware_1 = require("../middleware");
 exports.taskRouter = (0, express_1.Router)();
 exports.taskRouter.post('/', middleware_1.jwtAuth, task_services_1.addTask);
 exports.taskRouter.get('/', middleware_1.jwtAuth, task_services_1.getAllTasks);
+exports.taskRouter.get('/me', middleware_1.jwtAuth, task_services_1.getMyTasks);
 exports.taskRouter.get('/:id', middleware_1.jwtAuth, task_services_1.getTask);
 exports.taskRouter.patch('/:id', middleware_1.jwtAuth, (0, middleware_1.validateUpdateFields)(['completed', 'description']), task_services_1.updateTask);
 exports.taskRouter.delete('/:id', middleware_1.jwtAuth, task_services_1.deleteTask);

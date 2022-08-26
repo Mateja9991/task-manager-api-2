@@ -21,7 +21,7 @@ function jwtAuth(req, res, next) {
             const token = (req.header('Authorization') || '').replace('Bearer ', '');
             console.log(token);
             const { _id } = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || 'nbtn');
-            const user = yield models_1.User.findById(_id);
+            const user = yield models_1.User.findById(_id, null, { populate: ['tasks'] });
             if (!user) {
                 throw new Error('User not found(jwt');
             }
